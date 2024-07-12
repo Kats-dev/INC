@@ -1,0 +1,30 @@
+PROCEDURE "prCreateUpdateNearMissType" ( 
+    
+    IN NMTID INTEGER,        --Unique Id
+    IN INCID INTEGER,        --Incident Id
+    IN NRMID INTEGER,        --Near Miss Id
+    IN NRMTP SMALLINT,        --Type of Near Miss Selected
+    IN ISDEL NVARCHAR(1)
+
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --READS SQL DATA 
+   AS
+BEGIN 
+-- Insert data into table
+IF :NMTID = 0 THEN
+
+    INSERT INTO "INC_T_NRMTP" (INCID,NRMID,NRMTP,ISDEL,CRTBY,CRTDT,CRTTM) 
+    VALUES(INCID,NRMID,NRMTP,'0',SESSION_USER,CURRENT_DATE,CURRENT_TIME);
+    
+-- Update data into table                                
+ELSE
+
+    UPDATE "INC_T_NRMTP" 
+    SET ISDEL=:ISDEL,CHNBY=SESSION_USER,CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME 
+    WHERE NMTID=:NMTID AND INCID=:INCID AND NRMID=:NRMID ;
+    
+END IF;
+
+END;

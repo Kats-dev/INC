@@ -1,0 +1,28 @@
+PROCEDURE "prCreateUpdateOtherIncidentType" ( 
+    
+IN  OTHID   INTEGER,                      -- Unique id
+IN  INCID	INTEGER,                      -- Incident Id
+IN  OTDES	NVARCHAR(5000),               -- Provide Description on Incident Type not identified in Other Sections
+IN  CSTM1   NVARCHAR(1000),               -- Custom Filed 1	
+IN  CSTM2   NVARCHAR(1000)                -- Custom Filed 2	
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --READS SQL DATA 
+   AS 
+BEGIN
+
+-- Insert data into table 
+IF :OTHID = 0 THEN
+        INSERT INTO "INC_T_OTHER"(INCID,OTDES,CSTM1,CSTM2,ISDEL,CRTBY,CRTDT,CRTTM)
+								   VALUES(INCID,OTDES,CSTM1,CSTM2,'0',SESSION_USER,CURRENT_DATE,CURRENT_TIME);
+        
+ELSE
+-- Update data into table
+        UPDATE "INC_T_OTHER"
+        SET OTDES=:OTDES,CSTM1=:CSTM1,CSTM2=:CSTM2,CHNBY=SESSION_USER,CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME
+        WHERE OTHID=:OTHID AND INCID=:INCID AND ISDEL='0';
+        
+END IF;
+
+END

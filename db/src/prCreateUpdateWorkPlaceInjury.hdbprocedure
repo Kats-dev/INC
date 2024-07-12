@@ -1,0 +1,51 @@
+PROCEDURE "prCreateUpdateWorkPlaceInjury" ( 
+    IN WPIID	INTEGER,		--/ Unique id
+    IN INCID	INTEGER,		--/ Incident Id
+    IN IPLID    INTEGER,        -- Involved People Id
+    IN UNQID    NVARCHAR(20),   --/Unique id
+    IN INJIL	SMALLINT,		--/ Type of Injury / Illness
+    IN FACNM	NVARCHAR(250),	--/ Facility Name
+    IN MEDFC	SMALLINT,		--/ Was the injured taken to a medical facility?
+    IN DOCNM	NVARCHAR(250),	--/ Doctor Name
+    IN INJDS	NVARCHAR(5000),	--/ Injury / Illness Description
+    IN INJPS	NVARCHAR(5000),	--/ Injured person statement
+    IN ISALT	SMALLINT,		--/ Any alternative duties available?
+    IN ALTOP	SMALLINT,		--/ Alternative Duties Options
+    IN ANWAB	SMALLINT,		--/ Any impact on work ability?
+    IN DIMAB	NVARCHAR(5000),	--/ Describe impact on work ability
+    IN  CSTM1	NVARCHAR(1000),    -- Custom Filed 1
+    IN  CSTM2	NVARCHAR(1000),    -- Custom Filed 2
+    IN  CSTM3	NVARCHAR(5000),    -- Custom Filed 3
+    IN  CSTM4	NVARCHAR(1000),    -- Custom Filed 4
+    IN  CSTM5	NVARCHAR(1000),    -- Custom Filed 5
+    IN  CSTM6	NVARCHAR(5000),    -- Custom Filed 6
+    IN  CSTM7	NVARCHAR(1000),    -- Custom Filed 7
+    IN  CSTM8	NVARCHAR(1000),    -- Custom Filed 8
+    IN  ISREC   SMALLINT,          -- Is recordable 
+    IN  ISREP   SMALLINT          -- Is Reportable 
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --READS SQL DATA
+   AS
+BEGIN
+      
+-- Insert data into table
+    IF :WPIID = 0 THEN
+        INSERT INTO "INC_T_WPIDT" (INCID,IPLID, UNQID, INJIL, FACNM, MEDFC, 
+                    DOCNM, INJDS, INJPS, ISALT, ALTOP, ANWAB, DIMAB,CSTM1,CSTM2,CSTM3,CSTM4,CSTM5,CSTM6,CSTM7,CSTM8,ISREC,ISREP,ISDEL,CRTBY,CRTDT,CRTTM)
+                VALUES(INCID,IPLID, UNQID, INJIL, FACNM, MEDFC, 
+                    DOCNM, INJDS, INJPS, ISALT, ALTOP, ANWAB, DIMAB,CSTM1,CSTM2,CSTM3,CSTM4,CSTM5,CSTM6,CSTM7,CSTM8,ISREC,ISREP,'0',SESSION_USER,CURRENT_DATE,CURRENT_TIME);
+  
+    -- Update data into table                                
+    ELSE
+        UPDATE "INC_T_WPIDT" 
+        SET  UNQID =:UNQID, INJIL =:INJIL, FACNM =:FACNM, MEDFC =:MEDFC, DOCNM =:DOCNM, INJDS =:INJDS, INJPS =:INJPS, 
+            ISALT =:ISALT, ALTOP =:ALTOP, ANWAB =:ANWAB, DIMAB =:DIMAB, 
+            CSTM1=:CSTM1,CSTM2=:CSTM2,CSTM3=:CSTM3,CSTM4=:CSTM4,CSTM5=:CSTM5,CSTM6=:CSTM6,CSTM7=:CSTM7,CSTM8=:CSTM8,ISREC=:ISREC,ISREP=:ISREP,
+            CHNBY=SESSION_USER,CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME  
+        WHERE WPIID=:WPIID AND INCID=:INCID AND ISDEL='0';
+         
+    END IF;
+
+END

@@ -1,0 +1,60 @@
+PROCEDURE "prCreateUpdateInvolvedPeopleDetails" (
+
+   IN  IPLID    INTEGER,          -- Unique Id        
+   IN  INCID    INTEGER,          -- Incident Id        
+   IN  ROLET    SMALLINT,         -- Role        
+   IN  PERNM    NVARCHAR(250),    -- Person/Employee Name    
+   IN  EMPID    NVARCHAR(30),     -- Employee Id      
+   IN  PHONE    NVARCHAR(50),     -- Phone #    
+   IN  EMAIL    NVARCHAR(250),    -- Email Id
+   IN  SUPID    NVARCHAR(30),    -- Immediate Supervisor ID
+   IN  SUPNM    NVARCHAR(250),    -- Supervisor Name
+   IN  UNQID    NVARCHAR(20),     -- Unique id 
+   IN  ADDIF    NVARCHAR(5000),   -- Additional Information
+    IN DEPNM	NVARCHAR(200)	, --Department Name',
+    IN POSIT	NVARCHAR(200)	, --Position',
+    IN MNGID	NVARCHAR(30)  , -- 'Manager Id',
+    IN MANGR	NVARCHAR(250)	, --Manager Name',
+    IN EMADD	NVARCHAR(5000), --'Employee/Person Address',
+    IN EUNIT	NVARCHAR(250)	, --Unit No.',
+    IN SUPML	NVARCHAR(250)	, --Supervisor Mail',
+    IN CNTRY	NVARCHAR(250)	, --Country'
+    IN OLICN    NVARCHAR(250),	 --Licence Number'
+    IN  CSTM1	NVARCHAR(1000),    -- Custom Filed 1
+    IN  CSTM2	NVARCHAR(1000),    -- Custom Filed 2
+    IN  CSTM3	NVARCHAR(1000),    -- Custom Filed 3
+    IN  CSTM4	NVARCHAR(1000)    -- Custom Filed 4
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --READS SQL DATA 
+   AS
+BEGIN
+  
+-- Insert data into table  
+IF :IPLID = 0 THEN
+
+ 
+
+     INSERT INTO "INC_T_INVPL"(INCID,ROLET,PERNM,EMPID,PHONE,EMAIL,SUPID,SUPNM,UNQID,ADDIF,
+                DEPNM, POSIT, MNGID, MANGR, EMADD, EUNIT, SUPML, CNTRY, OLICN,CSTM1,CSTM2,CSTM3,CSTM4,ISDEL,CRTBY,CRTDT,CRTTM)
+     VALUES(INCID,ROLET,PERNM,EMPID,PHONE,EMAIL,SUPID,SUPNM,UNQID,ADDIF,
+                DEPNM, POSIT, MNGID, MANGR, EMADD, EUNIT, SUPML, CNTRY, OLICN,CSTM1,CSTM2,CSTM3,CSTM4,'0',CURRENT_USER,CURRENT_DATE,CURRENT_TIME);
+
+
+ELSE
+
+ 
+
+-- Update data into table 
+     UPDATE "INC_T_INVPL"
+     SET ROLET=:ROLET,PERNM=:PERNM,EMPID=:EMPID,PHONE=:PHONE,EMAIL=:EMAIL,SUPID=:SUPID,SUPNM=:SUPNM,UNQID=:UNQID,ADDIF=:ADDIF,
+     DEPNM=:DEPNM, POSIT=:POSIT, MNGID=:MNGID, MANGR=:MANGR, EMADD=:EMADD, EUNIT=:EUNIT, SUPML=:SUPML, CNTRY=:CNTRY, OLICN=:OLICN,
+     CSTM1=:CSTM1,CSTM2=:CSTM2,CSTM3=:CSTM3,CSTM4=:CSTM4,CHNBY=SESSION_USER,CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME
+     WHERE IPLID=:IPLID AND INCID=:INCID AND ISDEL='0';
+
+END IF;
+
+ 
+
+END

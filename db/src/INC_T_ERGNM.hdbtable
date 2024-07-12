@@ -1,0 +1,27 @@
+COLUMN TABLE "INC_T_ERGNM" (
+  "ERGID" INTEGER GENERATED ALWAYS AS IDENTITY (START 
+WITH 1 INCREMENT BY 1) COMMENT 'Unique id',
+  "INCID" INTEGER COMMENT 'Incident Id',
+  "ACUDS" NVARCHAR(5000) COMMENT 'Please provide brief description
+ on Acute-related incidents',
+  "CHRDS" NVARCHAR(5000) COMMENT 'Please provide brief description
+ on Chronic-related incidents',
+  "ERGCP" SMALLINT COMMENT 'Have you previously had an ergo assessment completed?',
+  "REQAS" SMALLINT COMMENT 'Are you requesting an ergo assessment because you are having an issue 
+with one of the items below: (please click one)',
+  "MOSTP" SMALLINT COMMENT 'What type of mouse do you currently use?',
+  "KEYTP" SMALLINT COMMENT 'What type of keyboard do you currently have?',
+  "CRWOK" SMALLINT COMMENT 'How long have you been in your current workstation?',
+  "SFASC" SMALLINT COMMENT 'Have you completed self-assessment of your work station?',
+  "ISDEL" NVARCHAR(1) COMMENT 'Is Deleted Flag (1=True/0=False)',
+  "CRTBY" NVARCHAR(100) COMMENT 'Created By ',
+  "CRTDT" DATE COMMENT 'Created Date',
+  "CRTTM" TIME COMMENT 'Created Time',
+  "CHNBY" NVARCHAR(100) COMMENT 'Changed By',
+  "CHNDT" DATE COMMENT 'Changed Date',
+  "CHNTM" TIME COMMENT 'Changed Time',
+  "CSTM1" NVARCHAR(1000) COMMENT 'Custom Filed 1',
+  "CSTM2" NVARCHAR(1000) COMMENT 'Custom Filed 2',
+  "CSTM3" NVARCHAR(5000) COMMENT 'Custom Filed 3',
+  PRIMARY KEY ("ERGID")
+);

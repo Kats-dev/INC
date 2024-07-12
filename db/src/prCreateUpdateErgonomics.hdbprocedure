@@ -1,0 +1,37 @@
+PROCEDURE "prCreateUpdateErgonomics" (
+    IN ERGID INTEGER,		         --   Unique id
+    IN INCID INTEGER,	 	         --   Incident Id
+    IN ACUDS NVARCHAR(5000),  	     --   Please provide brief description on Acute-related incidents
+    IN CHRDS NVARCHAR(5000),	     --   Please provide brief description on Chronic-related incidents
+    IN ERGCP SMALLINT,	    	     --   Have you previously had an ergo assessment completed?
+    IN REQAS SMALLINT,	    	     --   Are you requesting an ergo assessment because you are having an issue with one of the items below: (please click one)
+    IN MOSTP SMALLINT,	    	     --   What type of mouse do you currently use?
+    IN KEYTP SMALLINT,	    	     --   What type of keyboard do you currently have?
+    IN CRWOK SMALLINT,	    	     --   How long have you been in your current workstation?
+    IN SFASC SMALLINT,	    	     --   Have you completed self-assessment of your work station?
+    IN  CSTM1	NVARCHAR(1000),    -- Custom Filed 1
+    IN  CSTM2	NVARCHAR(1000),    -- Custom Filed 2
+    IN  CSTM3	NVARCHAR(5000)     -- Custom Filed 3
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER 
+   --READS SQL DATA 
+   AS
+BEGIN
+IF :ERGID = 0 THEN 
+   --Insert Data in to Table 
+   INSERT INTO "INC_T_ERGNM"(INCID,ACUDS,CHRDS,ERGCP,REQAS,MOSTP,KEYTP,CRWOK,SFASC,CSTM1,CSTM2,CSTM3,ISDEL,CRTBY,CRTDT,CRTTM)
+                             VALUES (INCID,ACUDS,CHRDS,ERGCP,REQAS,MOSTP,KEYTP,CRWOK,SFASC,CSTM1,CSTM2,CSTM3,'0',SESSION_USER,CURRENT_DATE,CURRENT_TIME);
+
+   
+ELSE 
+    --Update Data 
+   UPDATE "INC_T_ERGNM" SET ACUDS=:ACUDS,CHRDS=:CHRDS,ERGCP=:ERGCP,
+   REQAS=:REQAS,MOSTP=:MOSTP,KEYTP=:KEYTP,CRWOK=:CRWOK,SFASC=:SFASC,CSTM1=:CSTM1,CSTM2=:CSTM2,CSTM3=:CSTM3,CHNBY=SESSION_USER,
+   CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME
+   WHERE ERGID=:ERGID AND INCID=:INCID AND ISDEL = '0'; 
+   
+   
+END IF;
+   
+END

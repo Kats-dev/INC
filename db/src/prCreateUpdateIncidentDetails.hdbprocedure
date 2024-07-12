@@ -1,0 +1,69 @@
+PROCEDURE "prCreateUpdateIncidentDetails" (
+
+IN  INCID	INTEGER,         -- Unique id		
+IN  REBEH	SMALLINT,     -- Are you reporting on behalf of someone else?	
+IN  INCDT	DATE,            -- Date and Time Of Incident-Date		
+IN  INCTM	TIME,            -- Date and Time Of Incident-Time		
+IN  ICRDT	DATE,            -- Date and Time of Incident Reported-Date		
+IN  ICRTM	TIME,            -- Date and Time of Incident Reported-Time		
+IN  INCLC	SMALLINT,        -- Select Incident Location		
+IN  INCON	SMALLINT,        -- Country Of Incident		
+IN  LOCAD	NVARCHAR(1000),  -- Incident Location (Address)	
+IN  INCDE	NVARCHAR(5000),  -- Incident Description	 
+IN  INCSV	SMALLINT,        -- Incident Severity		
+IN  RGNOT	SMALLINT,        -- Have regulatory agencies been notified?	
+IN  INCPB	SMALLINT,        -- Incident Probability		
+IN  WKCOM	SMALLINT,        -- Has a workers compensation claim been submitted?	
+IN  EMGSR	SMALLINT,        -- Were emergency services notified?	
+IN  EMGNT	NVARCHAR(1000),  -- Which emergency services were notified?	
+IN  ISAVE	NVARCHAR(1),     -- Is Saved flag? 1=Save & 0=Submitted,
+IN  EMPSG	NVARCHAR(100),   -- Employee Signature	
+IN  EMPST	NVARCHAR(100),   -- Employee Signature Style	
+IN  EMPDT	DATE,            -- Employee Signature Date		
+IN  SUPSG	NVARCHAR(100),   -- Supervisor Signature	
+IN  SUPST	NVARCHAR(100),   -- Supervisor Signature Style	
+IN  SUPDT	DATE,            -- Supervisor Signature Date
+IN  LATIT	NVARCHAR(50),    -- Latitude	
+IN  LONGI	NVARCHAR(50),    -- Longitude	
+IN  DRFNM   NVARCHAR(150),   -- Draft Name
+IN  DESLC   NVARCHAR(500),   -- Describe Location,
+IN  RECOM   INTEGER,         -- Review Completion Flag
+IN  CSTM1   NVARCHAR(1000),      -- Custom Filed 1
+IN  CSTM2   NVARCHAR(1000),      -- Custom Filed 2
+IN  CSTM3   NVARCHAR(1000),      -- Custom Filed 3
+IN  CSTM4   NVARCHAR(1000),      -- Custom Filed 4
+IN  CSTM5   NVARCHAR(5000),      -- Custom Filed 5
+IN  CSTM6   NVARCHAR(1000),      -- Custom Filed 6
+IN  CSTM7   NVARCHAR(1000),      -- Custom Filed 7
+IN  CSTM8   NVARCHAR(1000),      -- Custom Filed 8
+IN  CSTM9   NVARCHAR(1000)       -- Custom Filed 9  
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --READS SQL DATA 
+   AS 
+BEGIN
+   
+-- Insert data into table 
+IF :INCID = 0 THEN
+
+        INSERT INTO "INC_T_INCDT"(REBEH,INCDT,INCTM,ICRDT,ICRTM,INCLC,INCON,LOCAD,INCDE,INCSV,RGNOT,INCPB,WKCOM,EMGSR,
+                                          EMGNT,INCST,ISAVE,EMPSG,EMPST,EMPDT,SUPSG,SUPST,SUPDT,LATIT,LONGI,DRFNM,DESLC,RECOM,
+                                          CSTM1,CSTM2,CSTM3,CSTM4,CSTM5,CSTM6,CSTM7,CSTM8,CSTM9,PRFLG,ISDEL,CRTBY,CRTDT,CRTTM,CRTTS,CHNBY,CHNDT,CHNTM)
+                                   VALUES(REBEH,INCDT,INCTM,ICRDT,ICRTM,INCLC,INCON,LOCAD,INCDE,INCSV,RGNOT,INCPB,WKCOM,EMGSR,
+                                          EMGNT,539,ISAVE,EMPSG,EMPST,EMPDT,SUPSG,SUPST,SUPDT,LATIT,LONGI,DRFNM,DESLC,RECOM,CSTM1,
+                                          CSTM2,CSTM3,CSTM4,CSTM5,CSTM6,CSTM7,CSTM8,CSTM9,0,'0',SESSION_USER,CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,SESSION_USER,CURRENT_DATE,CURRENT_TIME);
+                                            
+        
+ELSE  
+-- Update data into table
+        UPDATE "INC_T_INCDT"
+        SET REBEH=:REBEH,INCDT=:INCDT,INCTM=:INCTM,ICRDT=:ICRDT,ICRTM=:ICRTM,INCLC=:INCLC,INCON=:INCON,LOCAD=:LOCAD,INCDE=:INCDE,INCSV=:INCSV,
+            RGNOT=:RGNOT,INCPB=:INCPB,WKCOM=:WKCOM,EMGSR=:EMGSR,EMGNT=:EMGNT,ISAVE=:ISAVE,EMPSG=:EMPSG,EMPST=:EMPST,EMPDT=:EMPDT,
+            SUPSG=:SUPSG,SUPST=:SUPST,SUPDT=:SUPDT,LATIT=:LATIT,LONGI=:LONGI,DRFNM=:DRFNM,DESLC=:DESLC,RECOM=:RECOM,CSTM1=:CSTM1,CSTM2=:CSTM2,
+            CSTM3=:CSTM3,CSTM4=:CSTM4,CSTM5=:CSTM5,CSTM6=:CSTM6,CSTM7=:CSTM7,CSTM8=:CSTM8,CSTM9=:CSTM9,
+            CHNBY=SESSION_USER,CHNDT=CURRENT_DATE,CHNTM=CURRENT_TIME,CHNTS= CURRENT_TIMESTAMP
+        WHERE INCID=:INCID AND ISDEL='0';
+END IF;
+
+END
